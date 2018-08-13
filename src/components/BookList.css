@@ -1,0 +1,14 @@
+.book-list {
+  background-color: #dedede;
+  padding: 0;
+}
+
+.book,
+.book__author--list {
+  list-style: none;
+}
+
+.book {
+  border-bottom: 2px solid #eee;
+  padding: 2em;
+}
