@@ -12,3 +12,7 @@
   border-bottom: 2px solid #eee;
   padding: 2em;
 }
+
+.book__img {
+  max-width: 40vw;
+}

@@ -1,0 +1,30 @@
+.details {
+  background-color: #dedede;
+  height: 100vh;
+}
+
+.details__title {
+  font-weight: bold;
+  padding: 1em;
+}
+
+.details__description {
+  padding: 1em;
+}
+
+.detail-list__page,
+.detail-list__lang,
+.detail-list__price {
+  list-style: none;
+  text-transform: capitalize;
+}
+
+.details__infoLink {
+  padding: 1em;
+  float: left;
+}
+
+.details__buyLink {
+  padding: 1em;
+  float: right;
+}
