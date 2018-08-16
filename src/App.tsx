@@ -62,7 +62,7 @@ export default class App extends React.PureComponent<{}, State> {
     }
   };
 
-  private _renderBookList = (): React.ReactElement<any> =>
+  renderBookList = (): React.ReactElement<any> =>
     this.isSearchBtnClicked && this.state.books.length === 0 ? (
       <InfoMsg />
     ) : (
@@ -73,12 +73,6 @@ export default class App extends React.PureComponent<{}, State> {
         onChange={this.onInputChange}
       />
     );
-  public get renderBookList() {
-    return this._renderBookList;
-  }
-  public set renderBookList(value) {
-    this._renderBookList = value;
-  }
 
   render() {
     return (
