@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button, Input, InputGroup, InputGroupAddon } from "reactstrap";
 import "./App.css";
 import BookList from "./components/BookList";
 import InfoMsg from "./components/InfoMsg";
@@ -26,7 +25,7 @@ export interface Book {
     infoLink: string;
   };
   saleInfo: {
-    "retail Price": {
+    retailPrice: {
       amount: number;
       currencyCode: string;
     };
@@ -63,12 +62,23 @@ export default class App extends React.PureComponent<{}, State> {
     }
   };
 
-  renderBookList = (): React.ReactElement<any> =>
+  private _renderBookList = (): React.ReactElement<any> =>
     this.isSearchBtnClicked && this.state.books.length === 0 ? (
       <InfoMsg />
     ) : (
-      <BookList books={this.state.books} />
+      <BookList
+        books={this.state.books}
+        query={this.state.query}
+        search={this.search}
+        onChange={this.onInputChange}
+      />
     );
+  public get renderBookList() {
+    return this._renderBookList;
+  }
+  public set renderBookList(value) {
+    this._renderBookList = value;
+  }
 
   render() {
     return (
@@ -77,14 +87,6 @@ export default class App extends React.PureComponent<{}, State> {
           <Link to="/">
             <h1 className="app__header">Google-Books</h1>
           </Link>
-          <InputGroup className="app__input">
-            <Input value={this.state.query} onChange={this.onInputChange} />
-            <InputGroupAddon addonType="append" onKeyPress={this.search}>
-              <Button color="primary" onClick={this.search}>
-                Search
-              </Button>
-            </InputGroupAddon>
-          </InputGroup>
           <Switch>
             <Route path="/books/:id" component={BookDetails} />
             <Route path="/" render={this.renderBookList} />

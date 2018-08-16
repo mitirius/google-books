@@ -19,6 +19,10 @@
   text-transform: capitalize;
 }
 
+.detail-list__lang-val {
+  text-transform: uppercase;
+}
+
 .details__infoLink {
   padding: 1em;
   float: left;

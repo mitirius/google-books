@@ -44,12 +44,17 @@ export default class BookDetails extends React.PureComponent<Props, State> {
               page count: {book.volumeInfo.pageCount}
             </li>
             <li className="detail-list__lang">
-              language: {book.volumeInfo.language}
+              language:{" "}
+              <span className="detail-list__lang-val">
+                {book.volumeInfo.language}
+              </span>
             </li>
-            {book.saleInfo["retail Price"] && (
+            {book.saleInfo.retailPrice && (
               <li className="detail-list__price">
-                price: {book.saleInfo["retail Price"].amount}
-                <span>{book.saleInfo["retail Price"].currencyCode}</span>
+                price:{" "}
+                {`${book.saleInfo.retailPrice.amount} ${
+                  book.saleInfo.retailPrice.currencyCode
+                }`}
               </li>
             )}
           </ul>
