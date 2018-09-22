@@ -1,33 +1,77 @@
 import * as React from "react";
-import { Book } from "src/App";
+import { Book, URL } from "src/App";
 import "./BookList.css";
 import { Link } from "react-router-dom";
-import { Button, Input, InputGroup, InputGroupAddon } from "reactstrap";
+import * as queryString from "query-string";
+import SearchForm from "./SearchForm";
+import InfoMsg from "src/components/InfoMsg";
 
 interface Props {
-  books: Book[];
-  query: string;
-  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  search: (event: React.SyntheticEvent<HTMLElement>) => void;
+  location: { search: string };
 }
 
-export default function BookList(props: Props) {
-  return;
-  <>
-    <InputGroup className="app__input">
-      <Input value={props.query} onChange={props.onInputChange} />
-      <InputGroupAddon addonType="append">
-        <Button
-          color="primary"
-          onClick={props.search}
-          disabled={props.query === ""}
-        >
-          Search
-        </Button>
-      </InputGroupAddon>
-    </InputGroup>
-    <ul className="book-list">{props.books.map(renderItem)}</ul>;
-  </>;
+interface State {
+  query: string;
+  books: Book[];
+}
+
+export default class BookList extends React.PureComponent<Props, State> {
+  state = {
+    query: "",
+    books: []
+  };
+
+  isSearchBtnClicked = false;
+
+  renderBookList = (): React.ReactElement<any> =>
+    this.isSearchBtnClicked && this.state.books.length === 0 ? (
+      <InfoMsg />
+    ) : (
+      <BookList location={{ search: "" }} />
+    );
+
+  onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ query: event.target.value });
+  };
+
+  search = () => {
+    const searchTerm = queryString.parse(this.props.location.search);
+    fetch(`${URL}?q=${searchTerm.q}`)
+      .then(res => res.json())
+      .then(
+        json =>
+          json.items
+            ? this.setState({ books: json.items })
+            : this.setState({ books: [] })
+      )
+      .catch(console.log);
+  };
+
+  componentDidMount() {
+    if (this.props.location.search !== "") {
+      const query = queryString.parse(this.props.location.search);
+      this.setState({ query: query.q });
+      this.search();
+    }
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.location.search !== this.props.location.search) {
+      this.search();
+    }
+  }
+
+  render() {
+    return (
+      <>
+        <SearchForm
+          query={this.state.query}
+          onInputChange={this.onInputChange}
+        />
+        <ul className="book-list">{this.state.books.map(renderItem)}</ul>
+      </>
+    );
+  }
 }
 
 function renderItem(book: Book, idx: number) {
@@ -44,7 +88,8 @@ function renderItem(book: Book, idx: number) {
         <p className="book__title">{book.volumeInfo.title}</p>
       </Link>
       <ul className="book__author">
-        {book.volumeInfo.authors.constructor === Array &&
+        {!!book.volumeInfo.authors &&
+          book.volumeInfo.authors.constructor === Array &&
           book.volumeInfo.authors.map((author, idx) => (
             <li key={idx} className="book__author--list">
               {author}

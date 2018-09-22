@@ -38,6 +38,13 @@ export default class BookDetails extends React.PureComponent<Props, State> {
       return (
         <div className="details">
           <header className="details__title">{book.volumeInfo.title}</header>
+          {book.volumeInfo.imageLinks && (
+            <img
+              className="details__img"
+              src={book.volumeInfo.imageLinks.smallThumbnail}
+              alt={`${book.volumeInfo.title} image`}
+            />
+          )}
           <p className="details__description">{book.volumeInfo.description}</p>
           <ul className="details__list detail-list">
             <li className="detail-list__page">

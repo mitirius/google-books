@@ -32,3 +32,7 @@
   padding: 1em;
   float: right;
 }
+
+.details__img {
+  max-width: 40vw;
+}
