@@ -57,7 +57,11 @@ export default class BookList extends React.PureComponent<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.location.search !== this.props.location.search) {
-      this.search();
+      if (this.props.location.search !== "") {
+        this.search();
+      } else {
+        this.setState({ query: "", books: [] });
+      }
     }
   }
 
