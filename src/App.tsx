@@ -3,6 +3,8 @@ import "./App.css";
 import BookList from "./components/BookList";
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import BookDetails from "./components/BookDetails";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 export interface Book {
   id: string;
@@ -31,16 +33,18 @@ export const URL = `https://www.googleapis.com/books/v1/volumes`;
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <div className="app">
-        <Link to="/">
-          <h1 className="app__header">Google-Books</h1>
-        </Link>
-        <Switch>
-          <Route path="/books/:id" component={BookDetails} />
-          <Route path="/" component={BookList} />
-        </Switch>
-      </div>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <div className="app">
+          <Link to="/">
+            <h1 className="app__header">Google-Books</h1>
+          </Link>
+          <Switch>
+            <Route path="/books/:id" component={BookDetails} />
+            <Route path="/" component={BookList} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    </Provider>
   );
 }

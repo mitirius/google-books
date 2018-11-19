@@ -1,39 +1,27 @@
 import * as React from "react";
 import { match } from "react-router-dom";
-import { URL } from "../App";
 import { Book } from "../App";
 import "./BookDetails.css";
+import { connect } from "react-redux";
+import { LoadAction, getBookDetails } from "../redux/selectedBook";
 
 interface Props {
   match: match<{ id: string }>;
-}
-
-interface State {
-  bookDetails: Book | {};
+  bookDetails: Book;
+  getBookDetails: (id: string) => LoadAction;
 }
 
 export function isBook(book: Book | {}): book is Book {
   return (book as Book).id !== undefined;
 }
 
-export default class BookDetails extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.getBookDetails();
+class BookDetails extends React.PureComponent<Props> {
+  componentDidUpdate() {
+    this.props.getBookDetails(this.props.match.params.id);
   }
 
-  state = {
-    bookDetails: {}
-  };
-
-  getBookDetails = (): void => {
-    fetch(`${URL}\\${this.props.match.params.id}`)
-      .then(res => res.json())
-      .then(json => this.setState({ bookDetails: json }));
-  };
-
   render() {
-    const book = this.state.bookDetails;
+    const book = this.props.bookDetails;
     if (isBook(book)) {
       return (
         <div className="details">
@@ -77,3 +65,10 @@ export default class BookDetails extends React.PureComponent<Props, State> {
     return null;
   }
 }
+
+export default connect(
+  function({ selectedBook }: { selectedBook: Book }) {
+    return { bookDetails: selectedBook };
+  },
+  { getBookDetails }
+)(BookDetails);
